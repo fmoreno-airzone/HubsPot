@@ -17,7 +17,8 @@ Route::get('/contact/create', [ContactController::class, 'creation'])->name('cre
 Route::get('/contact/update', [ContactController::class, 'update'])->name('update.contact');
 Route::get('/contact/archive', [ContactController::class, 'archive'])->name('archive.contact');
 
-
+//VIEW
+Route::get('/home', function () {return view('home');});
 //CLIENTES
 Route::get('/tickets', [TicketController::class, 'list'])->name('list.tickets');
 Route::get('/ticket', [TicketController::class, 'filtered'])->name('filtered.ticket');

@@ -85,11 +85,13 @@ class HubsPotClient
         return $response->getResults();
     }
     //DEVUELVE UN TICKET FILTRADO.
-    public function filterTicketById() {
-
-        $ticket = $this->client->crm()->tickets()->basicApi()->getById('2815482867', null, null, null, false, null);
-        return $ticket;
+    public function filterTicketById($id) {
         /*
+        $ticket = $this->client->crm()->tickets()->basicApi()->getById($id, null, null, null, false, null); PRIMERA FORMA DE HACERLO, BÚSQUEDA SENCILLA
+        return $ticket;
+
+        OTRA FORMA DE HACERLO
+
          $filter = new TicketModel\Filter();
          $filter
              ->setOperator('EQ')
@@ -108,38 +110,61 @@ class HubsPotClient
          // @var CollectionResponseWithTotalSimplePublicObject $contactsPage
          $contactsPage = $this->client->crm()->tickets()->searchApi()->doSearch($searchRequest);
          return $contactsPage->getResults();*/
+
+
+         $request = [
+            "sorts" => [
+                  [
+                     "propertyName" => "createdate",
+                     "direction" => "DESCENDING"
+                  ]
+               ],
+            "query" => $id,
+            "fields" => [
+                        "ticketId"
+                     ],
+            "limit" => "100"
+         ];
+
+         $searchRequest = new TicketModel\PublicObjectSearchRequest($request);
+         $searchRequest->setProperties(['hs_object_id','hs_pipeline_stage','hs_ticket_priority','subject','content']);
+         $contactsPage = $this->client->crm()->tickets()->searchApi()->doSearch($searchRequest);
+         return $contactsPage->getResults();
+
     }
+
+    
     //CREAMOS UN TICKET DATOS HARDCODED.
-    public function createTicket() {
+    public function createTicket($content,$hs_pipeline,$hs_pipeline_stage,$hs_ticket_priority,$subject) {
         $ticketInput = new TicketModel\SimplePublicObjectInput();
         $ticketInput->setProperties([
-            'content' => 'Example description 1',
-            'hs_pipeline' => '0',
-            'hs_pipeline_stage' => '2',
-            'hs_ticket_priority' => 'HIGH',
-            'subject' => 'This is the subject'
+            'content' => $content,
+            'hs_pipeline' => $hs_pipeline,
+            'hs_pipeline_stage' => $hs_pipeline_stage,
+            'hs_ticket_priority' => $hs_ticket_priority,
+            'subject' => $subject
         ]);
 
         $this->client->crm()->tickets()->basicApi()->create($ticketInput);
         dd('hi');
     }
     //CAMBIA LOS DATOS AL TICKET ASOCIADO AL ID.
-    public function updateTicket() {
+    public function updateTicket($id,$content,$hs_pipeline,$hs_pipeline_stage,$hs_ticket_priority,$subject) {
         $newProperties = new TicketModel\SimplePublicObjectInput();
         $newProperties->setProperties([
-            'content' => 'Example description 1',
-            'hs_pipeline' => '0',
-            'hs_pipeline_stage' => '2',
-            'hs_ticket_priority' => 'LOW',
-            'subject' => 'This is the subject'
+            'content' => $content,
+            'hs_pipeline' => $hs_pipeline,
+            'hs_pipeline_stage' => $hs_pipeline_stage,
+            'hs_ticket_priority' => $hs_ticket_priority,
+            'subject' => $subject
         ]);
 
-        $this->client->crm()->tickets()->basicApi()->update(2888270269, $newProperties);
+        $this->client->crm()->tickets()->basicApi()->update($id, $newProperties);
         dd('Cambios guardados');
     }
     //ARCHIVA UN TICKET MEDIANTE UN ID.
-    public function archiveTicket() {
-        $this->client->crm()->tickets()->basicApi()->archive(2825356518);
+    public function archiveTicket($id) {
+        $this->client->crm()->tickets()->basicApi()->archive($id);
         dd('Ticket archivado');
     }
 
