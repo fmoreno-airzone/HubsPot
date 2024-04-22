@@ -1,4 +1,4 @@
-<form action="Routes/web.php" method="GET">
+<form action="Routes/web.php" method="PUT">
     <div>
         <h2>Actualización de ticket</h2>
         <div>

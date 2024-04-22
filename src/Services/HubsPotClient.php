@@ -27,26 +27,7 @@ class HubsPotClient
 
         $contact = $this->client->crm()->contacts()->basicApi()->getById('6660841437', null, null, null, false, null); //('ddominguez@altracorporacion.com', null, null, null, false, 'email');
 
-        /*      OTRA FORMA DE HACERLO
 
-        $filter = new ContactModel\Filter();
-        //FILTRO QUE CONTIENE EL OPERADOR, EL VALOR, Y LA PROPIEDAD A BUSCAR
-        $filter
-            ->setOperator('EQ')
-            ->setPropertyName('email')
-            ->setValue('ddominguez@altracorporacion.com');
-
-        $filterGroup = new ContactModel\FilterGroup();
-        $filterGroup->setFilters([$filter]);
-
-        $searchRequest = new ContactModel\PublicObjectSearchRequest();
-        $searchRequest->setFilterGroups([$filterGroup]);
-        // PROPIEDADES QUE QUEREMOS OBTENER
-        $searchRequest->setProperties(['firstname', 'lastname', 'date_of_birth', 'email']);
-
-        $contactsPage = $this->client->crm()->contacts()->searchApi()->doSearch($searchRequest);
-
-        return $contactsPage->getResults();*/
         return $contact;
     }
     //CREAMOS UN CONTACTO DATOS HARDCODED.
@@ -86,33 +67,8 @@ class HubsPotClient
     }
     //DEVUELVE UN TICKET FILTRADO.
     public function filterTicketById($id) {
-        /*
-        $ticket = $this->client->crm()->tickets()->basicApi()->getById($id, null, null, null, false, null); PRIMERA FORMA DE HACERLO, BÚSQUEDA SENCILLA
-        return $ticket;
 
-        OTRA FORMA DE HACERLO
-
-         $filter = new TicketModel\Filter();
-         $filter
-             ->setOperator('EQ')
-             ->setPropertyName('hs_object_id')
-             ->setValue('2815482867');
-
-         $filterGroup = new TicketModel\FilterGroup();
-         $filterGroup->setFilters([$filter]);
-
-         $searchRequest = new TicketModel\PublicObjectSearchRequest();
-         $searchRequest->setFilterGroups([$filterGroup]);
-
-         // Get specific properties
-         $searchRequest->setProperties(['hs_object_id','hs_pipeline_stage','hs_ticket_priority','subject','content']);
-
-         // @var CollectionResponseWithTotalSimplePublicObject $contactsPage
-         $contactsPage = $this->client->crm()->tickets()->searchApi()->doSearch($searchRequest);
-         return $contactsPage->getResults();*/
-
-
-         $request = [
+        $request = [
             "sorts" => [
                   [
                      "propertyName" => "createdate",
@@ -130,10 +86,9 @@ class HubsPotClient
          $searchRequest->setProperties(['hs_object_id','hs_pipeline_stage','hs_ticket_priority','subject','content']);
          $contactsPage = $this->client->crm()->tickets()->searchApi()->doSearch($searchRequest);
          return $contactsPage->getResults();
-
     }
 
-    
+
     //CREAMOS UN TICKET DATOS HARDCODED.
     public function createTicket($content,$hs_pipeline,$hs_pipeline_stage,$hs_ticket_priority,$subject) {
         $ticketInput = new TicketModel\SimplePublicObjectInput();

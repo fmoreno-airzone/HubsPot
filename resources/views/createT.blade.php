@@ -1,4 +1,4 @@
-<form action="Routes/web.php" method="GET">
+<form action="HubsPotClient" method="POST">
     <div>
         <h2>Creación de tickets</h2>
         <div>

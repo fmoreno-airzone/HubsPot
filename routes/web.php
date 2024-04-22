@@ -18,7 +18,11 @@ Route::get('/contact/update', [ContactController::class, 'update'])->name('updat
 Route::get('/contact/archive', [ContactController::class, 'archive'])->name('archive.contact');
 
 //VIEW
-Route::get('/home', function () {return view('home');});
+Route::get('/home', function () {return view('createT');});
+Route::get('/update', function () {return view('update');});
+Route::get('/filter', function () {return view('filter');});
+
+
 //CLIENTES
 Route::get('/tickets', [TicketController::class, 'list'])->name('list.tickets');
 Route::get('/ticket', [TicketController::class, 'filtered'])->name('filtered.ticket');
